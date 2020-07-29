@@ -32,10 +32,20 @@ def imageToString():
 	print(pytesseract.image_to_string(img_rgb))
 	
 
+def prepImage():
+	image = cv2.imread('nasus.png')
+	grey = cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
+	cv2.imshow("Original image",image)
+	cv2.imshow("Original image",grey)
+
+	cv2.waitKey(0)
+	cv2.destroyAllWindows()
 
 
-imageToString()
 
+
+#imageToString()
+prepImage()
 
 searching = False
 
