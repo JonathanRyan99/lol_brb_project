@@ -63,6 +63,17 @@ def match_template(image, template):
     return cv2.matchTemplate(image, template, cv2.TM_CCOEFF_NORMED)
 
 
+def rescale(image,scale_percent):
+	#scale_percent 220 would be 120% bigger
+	width = int(img.shape[1] * scale_percent / 100)
+	height = int(img.shape[0] * scale_percent / 100)
+	dim = (width, height)
+	# resize image
+	resized = cv2.resize(img, dim, interpolation = cv2.INTER_AREA)
+	return resized
+
+
+
 #custom white list adds all upper and lowercase characters (prevents random characters increasing accuracy)
 #--psm 6 means that text is assumed to be in a single line
 custom_config = r'-c tessedit_char_whitelist=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ --psm 6'
