@@ -80,7 +80,18 @@ custom_config = r'-c tessedit_char_whitelist=abcdefghijklmnopqrstuvwxyzABCDEFGHI
 #print(pytesseract.image_to_string(img, config=custom_config))
 
 
-img = cv2.imread('fizz_skin1.png')
+img = cv2.imread('caitlyn_skin1.png')
+
+resized = rescale(img,220)
+bgrey = get_grayscale(resized)
+bthresh = thresholdingBW(bgrey)
+cv2.imshow("resized image", bthresh)
+print("resized threshold: ")
+print(pytesseract.image_to_string(bthresh,config=custom_config))
+
+
+
+
 
 gray = get_grayscale(img)
 cv2.imshow("greyscale image", gray)
