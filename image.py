@@ -4,17 +4,13 @@ import pyautogui
 import time
 import pytesseract
 
-			
-
-
-
 # get grayscale image
 def get_grayscale(image):
     return cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
 # noise removal
 def remove_noise(image):
-    return cv2.medianBlur(image,5)
+    return cv2.medianBlur(image,3)
  
 #thresholding
 def thresholding(image):
@@ -27,17 +23,17 @@ def thresholdingBW(image):
 
 #dilation
 def dilate(image):
-    kernel = np.ones((5,5),np.uint8)
+    kernel = np.ones((3,3),np.uint8)
     return cv2.dilate(image, kernel, iterations = 1)
     
 #erosion
 def erode(image):
-    kernel = np.ones((5,5),np.uint8)
+    kernel = np.ones((3,3),np.uint8)
     return cv2.erode(image, kernel, iterations = 1)
 
 #opening - erosion followed by dilation
 def opening(image):
-    kernel = np.ones((5,5),np.uint8)
+    kernel = np.ones((3,3),np.uint8)
     return cv2.morphologyEx(image, cv2.MORPH_OPEN, kernel)
 
 #canny edge detection
@@ -80,14 +76,21 @@ custom_config = r'-c tessedit_char_whitelist=abcdefghijklmnopqrstuvwxyzABCDEFGHI
 #print(pytesseract.image_to_string(img, config=custom_config))
 
 
-img = cv2.imread('caitlyn_skin1.png')
+img = cv2.imread('xerath.png')
 
-resized = rescale(img,220)
-bgrey = get_grayscale(resized)
-bthresh = thresholdingBW(bgrey)
-cv2.imshow("resized image", bthresh)
+big = rescale(img,250)
+big = get_grayscale(big)
+big = thresholdingBW(big)
+big = dilate(big)
+big = erode(big)
+big = canny(big)
+
+cv2.imshow("resized image", big)
+
+
+
 print("resized threshold: ")
-print(pytesseract.image_to_string(bthresh,config=custom_config))
+print(pytesseract.image_to_string(big,config=custom_config))
 
 
 
