@@ -27,7 +27,7 @@ def stageIdentify():
 #then carries out the appriate check
 
 
-searching = False
+searching = True
 
 while searching == True:
 	
