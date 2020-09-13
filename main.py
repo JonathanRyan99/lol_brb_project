@@ -9,10 +9,12 @@ import pytesseract
 def findAcceptButton():
 	print("finding Accept button")
 	try:
-		pyautogui.click('images/accept.png')
-		return True
+		pyautogui.click('images/accept.PNG')
 	except:
 		print("ERROR:AcceptButton not found")
+		return False
+	return True
+
 		
 			
 def stageIdentify():
@@ -32,8 +34,18 @@ def stageIdentify():
 #then carries out the appriate check
 
 stage = 0
-stage = stageIdentify()
-print("returned stage: ",stage)
+run = True
+while run == True:
+	
+	stage = stageIdentify()
+	print("returned stage: ",stage)
+	
+	if stage == 1:
+		if findAcceptButton() == True:
+			run = False
+		
+		stage = 0
+		
 
 
 
