@@ -16,7 +16,12 @@ def findAcceptButton():
 		
 			
 def stageIdentify():
-	print("assessing stage")
+	if pyautogui.locateOnScreen('images/stage_1_id.PNG') != None:
+		return 1
+	if pyautogui.locateOnScreen('images/stage_2_id.PNG') != None:
+		return 2
+	else:
+		return 0
 
 
 	
@@ -26,18 +31,9 @@ def stageIdentify():
 #check stage before each stop, make a function that looks for identifiers on the screen
 #then carries out the appriate check
 
-
-searching = True
-
-while searching == True:
-	
-	if findAcceptButton() == True:
-		break
-	else:
-		time.sleep(5)
-
-
-print("end program")
+stage = 0
+stage = stageIdentify()
+print("returned stage: ",stage)
 
 
 

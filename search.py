@@ -1,16 +1,9 @@
-import numpy as np
-import cv2
+
 import pyautogui
 import time
-import pytesseract
+#make switch statement to derermine the current stage then do the accept shit
 
 
-def findMatchButton():
-	print("finding findMatch button")
-	try:
-		pyautogui.click('images/findMatch.png')
-	except:
-		print("ERROR:MatchButton not found")
 
 
 
@@ -25,17 +18,33 @@ def findAcceptButton():
 			
 
 
-searching = True
+def findStage():
+	if pyautogui.locateOnScreen('images/stage_1_id.png'):
+		print("stage 1 found")
+		return 1
+		
 
-while searching == True:
-	
-	if findAcceptButton() == True:
-		break
+	if pyautogui.locateOnScreen('images/stage_2_id.png'):
+		print("stage 2 found")
+		return 2
+
 	else:
-		time.sleep(5)
+		print("stage unidentified")
+		return 0
 
+	
 
-print("end program")
+searching = True
+stage = 0
+
+while searching:
+	if stage == 0:
+		stage = findStage()
+	else:
+		if stage == 1:
+			findAcceptButton()
+		if stage == 2:
+			print("in lobby call detection...")
 
 
 
