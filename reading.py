@@ -6,7 +6,7 @@ championsDict = {}
 with open("champions.txt") as file:
 	for line in file:
 		data = line.split()
-		championsDict[data[0]] = data[1]
+		championsDict[data[0].lower()] = data[1]
 
 
 def get_matches(query,options,limit):
@@ -14,10 +14,11 @@ def get_matches(query,options,limit):
 	return results
 
 
+#Fizz works, fizz does not
 #this returned ashe as a 90% match 
 
 
-sample = "Fizz"
+sample = "fizz"
 
 try:
 	mastery = championsDict[sample]
