@@ -3,7 +3,9 @@ import cv2
 import pyautogui
 import time
 import pytesseract
-
+#REMEMBER:
+#WHEN USING THIS PROGRAM LEAGUE NEEDS TO BE AT 1600 X 900 RES AS THIS IS THE RESOLUTION OF THE 
+#REFERENCE IMAGES USED FOR AUTOGUI. 
 
 
 def findAcceptButton():
@@ -16,7 +18,10 @@ def findAcceptButton():
 	return True
 
 		
-			
+
+#0: UNDFINED
+#1: SEARCHING
+#2: CHAMPSELECT	
 def stageIdentify():
 	if pyautogui.locateOnScreen('images/stage_1_id.PNG') != None:
 		return 1
@@ -46,6 +51,6 @@ while run == True:
 		
 		stage = 0
 		
-
+print("program finished")
 
 

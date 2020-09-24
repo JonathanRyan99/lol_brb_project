@@ -40,23 +40,7 @@ def opening(image):
 def canny(image):
     return cv2.Canny(image, 100, 200)
 
-#skew correction
-def deskew(image):
-    coords = np.column_stack(np.where(image > 0))
-    angle = cv2.minAreaRect(coords)[-1]
-    if angle < -45:
-        angle = -(90 + angle)
-    else:
-        angle = -angle
-    (h, w) = image.shape[:2]
-    center = (w // 2, h // 2)
-    M = cv2.getRotationMatrix2D(center, angle, 1.0)
-    rotated = cv2.warpAffine(image, M, (w, h), flags=cv2.INTER_CUBIC, borderMode=cv2.BORDER_REPLICATE)
-    return rotated
 
-#template matching
-def match_template(image, template):
-    return cv2.matchTemplate(image, template, cv2.TM_CCOEFF_NORMED)
 
 
 def rescale(image,scale_percent):
@@ -76,7 +60,7 @@ custom_config = r'-c tessedit_char_whitelist=abcdefghijklmnopqrstuvwxyzABCDEFGHI
 #print(pytesseract.image_to_string(img, config=custom_config))
 
 
-img = cv2.imread('xerath.png')
+img = cv2.imread('caitlyn.png')
 
 big = rescale(img,250)
 big = get_grayscale(big)
