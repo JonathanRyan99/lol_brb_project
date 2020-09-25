@@ -42,8 +42,19 @@ def rescale(image,scale_percent):
 #-----------------------------------------------------------------------------------------------
 
 
+#gets the region with character name in it
+#takes coor of known image on screen and then uses the difference between this to create get region around the character name
+def name_image_region():
+	stage_2_id_coord = pyautogui.locateOnScreen('images/stage_2_id.PNG')
+	if ( stage_2_id_coord != None):
+		image = pyautogui.screenshot(region=(stage_2_id_coord[0]+50, stage_2_id_coord[1]-330, 360, 30))
+		return image
+	else:
+		print("name region detection failed")
+		return False
 
-def character_detection():
+
+def character_detection(img):
 	#write function to cut image and feed into here
 	
 	#custom white list adds all upper and lowercase characters (prevents random characters increasing accuracy)
@@ -51,7 +62,7 @@ def character_detection():
 	custom_config = r'-c tessedit_char_whitelist=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ --psm 6'
 	#print(pytesseract.image_to_string(img, config=custom_config))
 	
-	img = cv2.imread('caitlyn_skin1.png')
+	#img = cv2.imread('caitlyn_skin1.png')
 
 	big = rescale(img,250)
 	big = get_grayscale(big)
@@ -97,19 +108,26 @@ def stageIdentify():
 #then carries out the appriate check
 
 #main loop -------------------------------------------------------------------
-stage = 0
-run = True
-while run == True:
+def main():
+	stage = 0
+	run = True
+	while run == True:
 	
-	stage = stageIdentify()
-	print("returned stage: ",stage)
+		stage = stageIdentify()
+		print("returned stage: ",stage)
 	
-	if stage == 1:
-		if findAcceptButton() == True:
-			run = False
+		if stage == 1:
+			if findAcceptButton() == True:
+				run = False
 		
-		stage = 0
-		
+			stage = 0
+	return
+
+
+image = name_image_region()
+if(image != False):
+	cv2.imshow("name region", image)
+
 print("program finished")
 
 
