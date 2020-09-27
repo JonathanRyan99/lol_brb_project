@@ -44,19 +44,19 @@ def rescale(image,scale_percent):
 
 #gets the region with character name in it
 #takes coor of known image on screen and then uses the difference between this to create get region around the character name
-def name_image_region():
+def get_name_region():
+	#works but only saves it as a file
 	stage_2_id_coord = pyautogui.locateOnScreen('images/stage_2_id.PNG')
 	if ( stage_2_id_coord != None):
-		image = pyautogui.screenshot(region=(stage_2_id_coord[0]+50, stage_2_id_coord[1]-330, 360, 30))
-		return image
+		print("cutting name")
+		image = pyautogui.screenshot('my_screenshot.png',region=(stage_2_id_coord[0]+50, stage_2_id_coord[1]-280, 360, 50))
 	else:
 		print("name region detection failed")
-		return False
 
-
-def character_detection(img):
-	#write function to cut image and feed into here
+	return image
 	
+
+def OCR_on_name(img):
 	#custom white list adds all upper and lowercase characters (prevents random characters increasing accuracy)
 	#--psm 6 means that text is assumed to be in a single line
 	custom_config = r'-c tessedit_char_whitelist=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ --psm 6'
@@ -74,15 +74,30 @@ def character_detection(img):
 	return(pytesseract.image_to_string(big,config=custom_config))
 
 
+#attempts to validate name and returns the mastry associated
+def validate_name(name):
+	championsDict = {}
+
+	with open("champions.txt") as file:
+		for line in file:
+			data = line.split()
+			championsDict[data[0].lower()] = data[1]
+
+	try:
+		mastery = championsDict[name]
+		print("champion found: ",name,"mastery: ",mastery)
+		return mastery
+	except:
+		print("champion not found")
+		return "NA"
 
 
-#-------------------------------stage detection--------------------------------
-def findAcceptButton():
-	print("finding Accept button")
+def press_AcceptButton():
 	try:
 		pyautogui.click('images/accept.PNG')
+		print("accept pressed")
 	except:
-		print("ERROR:AcceptButton not found")
+		print("AcceptButton not found")
 		return False
 	return True
 
@@ -100,10 +115,6 @@ def stageIdentify():
 		return 0
 
 
-	
-
-
-
 #check stage before each stop, make a function that looks for identifiers on the screen
 #then carries out the appriate check
 
@@ -114,19 +125,26 @@ def main():
 	while run == True:
 	
 		stage = stageIdentify()
-		print("returned stage: ",stage)
+		print("current stage: ",stage)
 	
 		if stage == 1:
-			if findAcceptButton() == True:
+			if press_AcceptButton() == True:
 				run = False
 		
 			stage = 0
+		if stage == 2:
+			name_img = get_name_region()
+			name = OCR_on_name(name_img)
+			mastrey = validate_name(name)
+			if(mastrey != "NA"):
+				print("applying mastrey")
+
 	return
 
 
-image = name_image_region()
-if(image != False):
-	cv2.imshow("name region", image)
+img = cv2.imread('my_screenshot2.png')
+print(OCR_on_name(img))
+
 
 print("program finished")
 
