@@ -46,32 +46,36 @@ def rescale(image,scale_percent):
 #takes coor of known image on screen and then uses the difference between this to create get region around the character name
 def get_name_region():
 	#works but only saves it as a file
-	stage_2_id_coord = pyautogui.locateOnScreen('images/stage_2_id.PNG')
+	stage_2_id_coord = pyautogui.locateOnScreen('images/stage_2_id.PNG', confidence = 0.8)
 	if ( stage_2_id_coord != None):
 		print("cutting name")
 		image = pyautogui.screenshot('my_screenshot.png',region=(stage_2_id_coord[0]+50, stage_2_id_coord[1]-280, 360, 50))
+		return True
 	else:
 		print("name region detection failed")
+		return False
 
-	return image
+	
 	
 
-def OCR_on_name(img):
-	#custom white list adds all upper and lowercase characters (prevents random characters increasing accuracy)
-	#--psm 6 means that text is assumed to be in a single line
-	custom_config = r'-c tessedit_char_whitelist=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ --psm 6'
-	#print(pytesseract.image_to_string(img, config=custom_config))
-	
-	#img = cv2.imread('caitlyn_skin1.png')
+def OCR_on_name(image):
 
-	big = rescale(img,250)
+	big = rescale(image,250)
 	big = get_grayscale(big)
 	big = thresholdingBW(big)
 	big = dilate(big)
 	big = erode(big)
 	big = canny(big)
-	
-	return(pytesseract.image_to_string(big,config=custom_config))
+
+	#custom white list adds all upper and lowercase characters (prevents random characters increasing accuracy)
+	#--psm 6 means that text is assumed to be in a single line
+	custom_config = r'-c tessedit_char_whitelist=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ --psm 6'
+	#print(pytesseract.image_to_string(img, config=custom_config))
+	#expand image to make text larger emphasising character shape
+	cv2.imshow("resized image", big)
+	print("big: ")
+	name = pytesseract.image_to_string(big,config=custom_config)
+	return(name)
 
 
 #attempts to validate name and returns the mastry associated
@@ -101,15 +105,48 @@ def press_AcceptButton():
 		return False
 	return True
 
+#selects mastery (negative y is up)
+def select_mastery(mastery):
+	try:
+		stage_2_id_coord = pyautogui.locateOnScreen('images/stage_2_id.PNG', confidence= 0.8)
+		base_mastery_x = stage_2_id_coord[0]+115
+		base_mastery_y = stage_2_id_coord[1]
+		pyautogui.click(x= base_mastery_x, y= base_mastery_y)
+		time.sleep(1)
 		
+		if mastery == "R":
+			pyautogui.click(x= base_mastery_x, y= base_mastery_y-50)
+			print("Resolve mastery")
+
+		if mastery == "D":
+			pyautogui.click(x= base_mastery_x, y= base_mastery_y-100)
+			print("Domination mastery")
+
+		if mastery == "P":
+			pyautogui.click(x= base_mastery_x, y= base_mastery_y-150)
+			print("Precision mastery")
+
+		if mastery == "S":
+			pyautogui.click(x= base_mastery_x, y= base_mastery_y-200)
+			print("Sourcery mastery")
+
+		if mastery == "I":
+			pyautogui.click(x= base_mastery_x, y= base_mastery_y-250)
+			print("Insperation mastery")
+
+		return
+	except:
+		print("failed to apply mastery")
+		return
+
 
 #0: UNDFINED
 #1: SEARCHING
 #2: CHAMPSELECT	
 def stageIdentify():
-	if pyautogui.locateOnScreen('images/stage_1_id.PNG') != None:
+	if pyautogui.locateOnScreen('images/stage_1_id.PNG', confidence = 0.8) != None:
 		return 1
-	if pyautogui.locateOnScreen('images/stage_2_id.PNG') != None:
+	if pyautogui.locateOnScreen('images/stage_2_id.PNG', confidence = 0.8) != None:
 		return 2
 	else:
 		return 0
@@ -135,15 +172,28 @@ def main():
 		if stage == 2:
 			name_img = get_name_region()
 			name = OCR_on_name(name_img)
-			mastrey = validate_name(name)
-			if(mastrey != "NA"):
-				print("applying mastrey")
+			mastery = validate_name(name)
+			if(mastery != "NA"):
+				print("applying mastery")
+				select_mastery(mastery)
+
 
 	return
 
+img = cv2.imread('my_screenshot.png')
+name = OCR_on_name(img)
+print(name)
 
-img = cv2.imread('my_screenshot2.png')
-print(OCR_on_name(img))
+#if (name_img != False):
+	#name = OCR_on_name(name_img)
+	#mastery = validate_name(name)
+	#print(mastery)
+	#if(mastery != "NA"):
+		#print("applying mastery")
+		#select_mastery(mastery)
+
+
+
 
 
 print("program finished")

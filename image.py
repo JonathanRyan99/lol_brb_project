@@ -37,37 +37,41 @@ def rescale(image,scale_percent):
 
 
 
-img = cv2.imread('caitlyn_skin1.png')
-
-big = rescale(img,250)
-big = get_grayscale(big)
-big = thresholdingBW(big)
-big = dilate(big)
-big = erode(big)
-big = canny(big)
 
 
 
+def main(img):
 
-#custom white list adds all upper and lowercase characters (prevents random characters increasing accuracy)
-#--psm 6 means that text is assumed to be in a single line
-custom_config = r'-c tessedit_char_whitelist=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ --psm 6'
-#print(pytesseract.image_to_string(img, config=custom_config))
+    big = rescale(img,250)
+    big = get_grayscale(big)
+    big = thresholdingBW(big)
+    big = dilate(big)
+    big = erode(big)
+    big = canny(big)
+
+    #custom white list adds all upper and lowercase characters (prevents random characters increasing accuracy)
+    #--psm 6 means that text is assumed to be in a single line
+    custom_config = r'-c tessedit_char_whitelist=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ --psm 6'
+    #print(pytesseract.image_to_string(img, config=custom_config))
 
 
-#these come with the best results
+    #these come with the best results
 
-#expand image to make text larger emphasising character shape
-cv2.imshow("resized image", big)
-print("big: ")
-print(pytesseract.image_to_string(big,config=custom_config))
+    #expand image to make text larger emphasising character shape
+    cv2.imshow("resized image", big)
+    print("big: ")
+    print(pytesseract.image_to_string(big,config=custom_config))
 
 
-#binarize grey scale producing clear image (this does not seem to be optimal)
-gray = get_grayscale(img)
-thresh = thresholdingBW(gray)
-cv2.imshow("threshold image", thresh)
-print("threshold: ")
-print(pytesseract.image_to_string(thresh,config=custom_config))
+    #binarize grey scale producing clear image (this does not seem to be optimal)
+    gray = get_grayscale(img)
+    thresh = thresholdingBW(gray)
+    cv2.imshow("threshold image", thresh)
+    print("threshold: ")
+    print(pytesseract.image_to_string(thresh,config=custom_config))
 
-cv2.waitKey(0)
+    cv2.waitKey(0)
+
+
+img = cv2.imread('my_screenshot.png')
+main(img)
