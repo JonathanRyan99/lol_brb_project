@@ -42,10 +42,10 @@ def rescale(image,scale_percent):
 #-----------------------------------------------------------------------------------------------
 
 
+
 #gets the region with character name in it
-#takes coor of known image on screen and then uses the difference between this to create get region around the character name
 def get_name_region():
-	#works but only saves it as a file
+	#region only works if you save as a file
 	stage_2_id_coord = pyautogui.locateOnScreen('images/stage_2_id.PNG', confidence = 0.8)
 	if ( stage_2_id_coord != None):
 		print("cutting name")
@@ -59,7 +59,8 @@ def get_name_region():
 	
 
 def OCR_on_name(image):
-
+	
+	
 	big = rescale(image,250)
 	big = get_grayscale(big)
 	big = thresholdingBW(big)
@@ -67,15 +68,16 @@ def OCR_on_name(image):
 	big = erode(big)
 	big = canny(big)
 
-	#custom white list adds all upper and lowercase characters (prevents random characters increasing accuracy)
-	#--psm 6 means that text is assumed to be in a single line
+	#custom whitelist --psm 6 means single line
 	custom_config = r'-c tessedit_char_whitelist=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ --psm 6'
-	#print(pytesseract.image_to_string(img, config=custom_config))
+	
+	
 	#expand image to make text larger emphasising character shape
 	cv2.imshow("resized image", big)
 	print("big: ")
 	name = pytesseract.image_to_string(big,config=custom_config)
 	return(name)
+
 
 
 #attempts to validate name and returns the mastry associated
@@ -180,12 +182,15 @@ def main():
 
 	return
 
-img = cv2.imread('my_screenshot.png')
-name = OCR_on_name(img)
-print(name)
+#img = cv2.imread('my_screenshot.png')
+#name = OCR_on_name(img)
+#print(name)
 
-#if (name_img != False):
-	#name = OCR_on_name(name_img)
+ 
+if (get_name_region() != False):
+	image = cv2.imread('my_screenshot.png')
+	name = OCR_on_name(image)
+	print(name)
 	#mastery = validate_name(name)
 	#print(mastery)
 	#if(mastery != "NA"):

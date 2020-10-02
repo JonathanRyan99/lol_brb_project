@@ -13,35 +13,23 @@ Project idea/purpose
 libarys used in this:
 install the following to an enviroment
 
+note you will also need to instal google command line application "tesseract"
+
 python 3.8
+opencv - ("pip install opencv-python")
+numpy - comes with opencv 
+pyautogui- ("pip install pyautogui")
+pytesseract- ("pip install pytesseract")
+	- this is a wrapper for googles cml tesseract
+	- https://pypi.org/project/pytesseract/
+
+FuzzyWuzzy - ("pip install FuzzyWuzzy")
+	- https://www.datacamp.com/community/tutorials/fuzzy-string-python
 
 
-opencv
-numpy - comes with opencv when you pip install
-"pip install opencv-python"
-only standard libary used here
-
-
-
-pyautogui
-"pip install pyautogui"
-
-pytesseract 
-"pip install pytesseract"
-
-(a wrapper for python )
-
-this requires the isntallation of the google command line application tesseract
-
-https://pypi.org/project/pytesseract/
-
-
-
-
-FuzzyWuzzy 
-pip install FuzzyWuzzy
-this is for fuzzy word detection as the readings from tesseract are not 100% acurate
-https://www.datacamp.com/community/tutorials/fuzzy-string-python
+to do:
+	-image parsing between function name_region() and OCR_on_name() fails return
+	-main loop is not written do to above
 
 
 
