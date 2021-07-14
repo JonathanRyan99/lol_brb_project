@@ -1,4 +1,4 @@
-UNFINISHED
+UNFINISHED ---> project now abandoned see Runeselector
 
 
 Project idea/purpose
